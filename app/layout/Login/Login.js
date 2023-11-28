@@ -1,43 +1,95 @@
-import { View, TextInput, Text, StatusBar, StyleSheet, Image, Pressable} from "react-native";
+import { useState } from "react";
+import axios from "axios";
+import { useFonts } from "expo-font";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { View, TextInput, Text, StyleSheet ,Image, Pressable} from "react-native";
 
-const logo = require('../../../assets/images/discord-logo-png-7622.png');
+const logo = require('../../../assets/images/vecteezy_abstract-colorful-background-book_22507090_384.png');
 
-const LoginPage = () => {
+const LoginPage = ({navigation}) => {
+    const [username, setUsername] = useState(null);
+    const [password, setPassword] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
+    const [fontLoaded] = useFonts({
+        'Lato-Italic': require('../../../assets/fonts/Lato-Italic.ttf')
+    });
+
+    const handleLogin =  () => {
+        axios.post('http://192.168.34.109:3000/user/login', {
+            username: username,
+            password: password
+        })
+        .then(res => {
+            alert(res.data)
+        })
+        .catch(err => {
+            alert(err.message);
+        })
+    }
+
+    const handleRegister = () => {
+        navigation.navigate('Register');
+    }
+
+    if (!fontLoaded) {
+        return null;
+    }
+
     return (
         <View style = {styles.loginContainer}>
             <View style = {styles.header}>
                 <Image source={logo} style = {styles.logo}/>
-                <Text style = {styles.textLogo}>Discord</Text>
+                <Text style = {styles.textLogo}>VieBook</Text>
             </View>
 
             <View style = {styles.textHeader}>
-                <Text style = {{fontSize: 24, color: '#F2F3F5', marginBottom: 8}}>Welcome back!</Text>
-                <Text style = {{fontSize: 16, color: '#808080'}}>We're so excited to see you again!</Text>
+                <Text style = {{fontSize: 24, color: '#F2F3F5'}}>Welcome back!</Text>
+                <Text style = {{fontSize: 16, color: '#808080', marginTop: 4}}>We're so excited to see you again!</Text>
             </View>
 
             <View style = {{marginVertical: 32}}>
                 <Text style = {{color: '#B5BAC1', fontSize: 12, fontWeight: 600, marginBottom: 12}}>
-                    EMAIL OR PHONE NUMBER <Text style = {{color: 'red', marginLeft: 4}}>*</Text>
+                    EMAIL OR USERNAME <Text style = {{color: 'red', marginLeft: 4}}>*</Text>
                 </Text>
-                <TextInput placeholder="Tên đăng nhập" style = {styles.textInput}/>
+                <TextInput 
+                    placeholder="Tên đăng nhập" 
+                    style = {styles.textInput}
+                    onChangeText={text => setUsername(text)}
+                />
                 <Text style = {{color: '#B5BAC1', fontSize: 12, fontWeight: 600, marginBottom: 12}}>
                     PASSWORD <Text style = {{color: 'red', marginLeft: 4}}>*</Text>
                 </Text>
-                <TextInput placeholder="Mật khẩu" style = {[styles.textInput, {marginBottom: 4}]} secureTextEntry = {true}/>
+                <View style = {{position: 'relative'}}>
+                    <TextInput placeholder="Mật khẩu" 
+                        style = {[styles.textInput, {marginBottom: 4}]} 
+                        secureTextEntry = {showPassword ? false : true}
+                        onChangeText={text => setPassword(text)}
+                    />
+                    {showPassword ? 
+                        <Pressable style = {{position: 'absolute', right : 8, top: 12}} onPress={() => setShowPassword(false)}>
+                            <Icon name = "eye-slash" size = {16} color='#333' />
+                        </Pressable>
+                        : 
+                        <Pressable style = {{position: 'absolute', right : 8, top: 12}} onPress={() => setShowPassword(true)}>
+                            <Icon name = "eye" size = {16} color='#333' />
+                        </Pressable>
+                    }
+                </View>
                 <Text style = {{color: "#00A8FC", fontSize: 14, fontWeight: 500}}>Forgot your password?</Text>
             </View>
 
             <View>
-                <Pressable style = {styles.buttonLogin}>
+                <Pressable style = {styles.buttonLogin} onPress={handleLogin}>
                     <Text style = {{color: '#fff', fontSize: 16}}>Log In</Text>
                 </Pressable>
             </View>
 
             <View style = {styles.suggestRegister}>
                 <Text style = {{color: '#949BA4', marginRight: 6, fontSize: 14}}>Need an account?</Text>
-                <Text style = {{color: '#00A8FC', fontSize: 14}}>Register</Text>
+                <Pressable onPress={handleRegister}>
+                    <Text style = {{color: '#00A8FC', fontSize: 14}}>Register</Text>
+                </Pressable>
             </View>
-            <StatusBar style = "auto"/>
         </View>
     );
 };
@@ -48,15 +100,15 @@ const styles = StyleSheet.create({
     loginContainer: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#313338',
+        backgroundColor: '#32363b',
+        // justifyContent: 'center',
     },
     header: {
-        flex: 1 / 8,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 100,
-        marginBottom: 20
+        marginTop: 60,
+        marginBottom: 28
     },
     logo: {
         width: 54,
@@ -67,9 +119,9 @@ const styles = StyleSheet.create({
         fontSize: 28,
         color: 'white',
         fontWeight: 600,
+        fontFamily: 'Lato-Italic'
     },
     textHeader: {
-        flex: 1 / 8,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
@@ -96,7 +148,6 @@ const styles = StyleSheet.create({
         borderRadius: 4
     },
     suggestRegister: {
-        flex: 1 / 8,
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',

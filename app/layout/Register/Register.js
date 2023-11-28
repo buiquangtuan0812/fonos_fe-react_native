@@ -1,32 +1,19 @@
 import {useState} from 'react';
+import { useFonts } from 'expo-font';
 import { 
-    StyleSheet, View, Text, Pressable, Image, TextInput,
+    StyleSheet, View, Text, Pressable, Image, TextInput
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import CheckBox from 'expo-checkbox';
-import AppLoading from 'expo-app-loading';
-import { useFonts } from 'expo-font';
 
 const logo = require("../../../assets/images/vecteezy_abstract-colorful-background-book_22507090_384.png");
 const url = 'https://github.com/buiquangtuan0812';
 import OpenURLButton from "../../components/Link/Link";
+import Icon from "react-native-vector-icons/FontAwesome";
+import axios from 'axios';
 
 const Register = () => {
     
-    const [day, setDay] = useState(null);
-    const [month, setMonth] = useState(null);
-    const [year, setYears] = useState(null);
-    const [isChecked, setChecked] = useState(false);
-    let [fontLoaded] = useFonts({
-        'Regular': require('../../../assets/fonts/Lato-Bold.ttf'),
-        'Montserrat': require('../../../assets/fonts/Montserrat-Italic-VariableFont_wght.ttf'),
-        'Lato': require('../../../assets/fonts/Lato-Italic.ttf')
-    })
-
-    if (!fontLoaded) {
-        return <AppLoading/>;
-    }
-
     const days = [
         {label: '1', value: '1', key: '1'},
         {label: '2', value: '2', key: '2'},
@@ -84,6 +71,61 @@ const Register = () => {
         {label: '1990', value: 1990},
     ];
 
+    const [day, setDay] = useState(null);
+    const [month, setMonth] = useState(null);
+    const [year, setYears] = useState(null);
+    const [isChecked, setChecked] = useState(false);
+    const [isCliked, setCliked] = useState(false);
+    const [username, setUsername] = useState(null);
+    const [password, setPassword] = useState(null); 
+    const [email, setEmail] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
+    const [fontLoaded] = useFonts({
+        'Lato': require('../../../assets/fonts/Lato-Italic.ttf'),
+        'Montserrat': require('../../../assets/fonts/Montserrat-Italic-VariableFont_wght.ttf')
+    });
+
+    const handleRegister = () => {
+        setCliked(!isCliked);
+        setTimeout(() => {
+            if (!email) {
+                alert('Please enter a email address');
+            }
+            else if (!username) {
+                alert('Please enter a username');
+            }
+            else if (!password) {
+                alert('Please enter a password');
+            }
+            else if (!isChecked) {
+                alert('Please agree to the rules');
+            }
+            else {
+                if (!String(email).includes('@gmail.com')) {
+                    alert('Email address must be a valid email address (e.g.@gmail.com)');
+                }
+                if ((String(password).length < 8)) {
+                    alert('Password must be at least 8 characters!');
+                }
+            }
+        }, 500);
+        // const birth = day + '/' + month + '/' + year;
+        // axios.post('http://192.168.31.199:3000/user/register', {
+            //     username,
+            //     password,
+            //     email
+        // })
+    }
+
+    if (isCliked) {
+        setTimeout(() => {
+            setCliked(false);
+        }, 500);
+    };
+
+    if (!fontLoaded) {
+        return null;
+    }
 
     return (
         <View style = {styles.registerContainer}>
@@ -97,12 +139,29 @@ const Register = () => {
             </View>
 
             <View style = {{width: 360}}>
-                <Text style = {{color: '#B5BAC1', fontSize: 12, fontWeight: 600, marginBottom: 8}}>EMAIL</Text>
-                <TextInput style = {styles.textInput}/>
-                <Text style = {{color: '#B5BAC1', fontSize: 12, fontWeight: 600, marginBottom: 8}}>USERNAME</Text>
-                <TextInput style = {styles.textInput}/>
-                <Text style = {{color: '#B5BAC1', fontSize: 12, fontWeight: 600, marginBottom: 8}}>PASSWORD</Text>
-                <TextInput style = {styles.textInput} secureTextEntry = {true}/>
+                <Text style = {{color: '#B5BAC1', fontSize: 12, fontWeight: 600, marginBottom: 8}}>
+                    EMAIL <Text style = {{color: 'red', marginLeft: 4}}>*</Text>
+                </Text>
+                <TextInput style = {styles.textInput} onChangeText={text => setEmail(text)}/>
+                <Text style = {{color: '#B5BAC1', fontSize: 12, fontWeight: 600, marginBottom: 8}}>
+                    USERNAME <Text style = {{color: 'red', marginLeft: 4}}>*</Text>
+                </Text>
+                <TextInput style = {styles.textInput} onChangeText={text => setUsername(text)}/>
+                <Text style = {{color: '#B5BAC1', fontSize: 12, fontWeight: 600, marginBottom: 8}}>
+                    PASSWORD <Text style = {{color: 'red', marginLeft: 4}}>*</Text>
+                </Text>
+                <View style = {{position: 'relative'}}>
+                    <TextInput style = {styles.textInput} secureTextEntry = {showPassword ? false : true} onChangeText={text => setPassword(text)}/>
+                    {showPassword ? 
+                        <Pressable style = {{position: 'absolute', right: 8, top: 10}} onPress={() => setShowPassword(false)}>
+                            <Icon name = "eye-slash" size={16} color="#ccc" />
+                        </Pressable>
+                        :
+                        <Pressable style = {{position: 'absolute', right: 8, top: 10}} onPress={() => setShowPassword(true)}>
+                            <Icon name = "eye" size={16} color="#ccc" />
+                        </Pressable>
+                    }
+                </View>
                 <Text style = {{color: '#B5BAC1', fontSize: 12, fontWeight: 600, marginBottom: 8}}>DATE OF BIRTH</Text>
             </View>
             <View style = {styles.selectContainer}>
@@ -113,7 +172,7 @@ const Register = () => {
                     placeholder={{label: 'Day', value: null}}
                     style={{
                         inputIOS: {
-                            fontSize: 16,
+                            fontSize: 14,
                             paddingVertical: 10,
                             paddingHorizontal: 10,
                             borderColor: '#ccc',
@@ -131,7 +190,7 @@ const Register = () => {
                     placeholder={{label: 'Month', value: null}}
                     style={{
                         inputIOS: {
-                            fontSize: 16,
+                            fontSize: 14,
                             paddingVertical: 10,
                             paddingHorizontal: 10,
                             borderColor: '#ccc',
@@ -149,7 +208,7 @@ const Register = () => {
                     placeholder={{label: 'Year', value: null}}
                     style={{
                         inputIOS: {
-                            fontSize: 16,
+                            fontSize: 14,
                             paddingVertical: 10,
                             paddingHorizontal: 10,
                             borderColor: '#ccc',
@@ -177,16 +236,18 @@ const Register = () => {
             </View>
 
             <View>
-                <Pressable style = {styles.buttonLogin}>
+                <Pressable 
+                    style={[styles.buttonLogin, { opacity: isCliked ? 0.8 : 1 }]}
+                    onPress={handleRegister}
+                >
                     <Text style = {{color: '#fff', fontSize: 16}}>Continue</Text>
                 </Pressable>
             </View>
             
             <View style = {styles.ruleContainer}>
                 <Text>By registering yu agree to VieBook's </Text>
-                <OpenURLButton url = {url} children="Rerms of Service." style = {{fontSize: 12, color: '#00A8FC'}}/>
+                <OpenURLButton url = {url} children="Rerms of Service." style = {{fontSize: 12, color: '#00A8FC'}} />
             </View>
-
         </View>
     )
 }
@@ -229,7 +290,7 @@ const styles = StyleSheet.create({
     textInput: {
         paddingHorizontal: 8,
         paddingVertical: 12,
-        fontSize: 16,
+        fontSize: 14,
         backgroundColor: '#1E1F22',
         marginBottom: 20,
         borderRadius: 4,
@@ -255,8 +316,8 @@ const styles = StyleSheet.create({
         width: 360,
         paddingVertical: 16,
         paddingHorizontal: 2,
-        backgroundColor: '#5865F2',
-        borderRadius: 4
+        borderRadius: 4,
+        backgroundColor: '#5865F2'
     },
     ruleContainer: {
         flexDirection: 'row',
