@@ -3,7 +3,6 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from "expo-font";
 
-import User from "../../../assets/images/team.png";
 import { useState } from "react";
 
 const Option = ({navigation}) => {
@@ -16,6 +15,14 @@ const Option = ({navigation}) => {
         setIsBack(true);
         navigation.navigate('Home');
     };
+
+    const toLogin = () => {
+        navigation.navigate('Login');
+    };  
+
+    const toSignUp = () => {
+        navigation.navigate('Register');
+    }
 
     if (!fontLoaded) {
         return null;
@@ -45,7 +52,7 @@ const Option = ({navigation}) => {
                         <Text style = {styles.textLogin}>Đăng nhập để lưu lại quá trình</Text>
                     </View>
                     <View>
-                        <Pressable style = {{marginBottom: 16, marginTop: 16}}>
+                        <Pressable style = {{marginBottom: 16, marginTop: 16}} onPress={toLogin}>
                             <LinearGradient
                                 colors={['#ff706f', '#ff8266', '#ffa157']}
                                 style = {{borderRadius: 24}}
@@ -55,7 +62,7 @@ const Option = ({navigation}) => {
                         </Pressable>
                     </View>
                     <View>
-                        <Pressable>
+                        <Pressable onPress={toSignUp}>
                             <Text style = {styles.textSignUp}>Tạo tài khoản mới</Text>
                         </Pressable>
                     </View>

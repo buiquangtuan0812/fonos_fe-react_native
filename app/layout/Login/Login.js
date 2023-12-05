@@ -4,7 +4,7 @@ import { useFonts } from "expo-font";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { View, TextInput, Text, StyleSheet ,Image, Pressable} from "react-native";
 
-const logo = require('../../../assets/images/vecteezy_abstract-colorful-background-book_22507090_384.png');
+const logo = require('../../../assets/images/logo.webp');
 
 const LoginPage = ({navigation}) => {
     const [username, setUsername] = useState(null);
@@ -43,8 +43,8 @@ const LoginPage = ({navigation}) => {
             </View>
 
             <View style = {styles.textHeader}>
-                <Text style = {{fontSize: 24, color: '#F2F3F5'}}>Welcome back!</Text>
-                <Text style = {{fontSize: 16, color: '#808080', marginTop: 4}}>We're so excited to see you again!</Text>
+                <Text style = {{fontSize: 24, color: '#F2F3F5'}}>Chào mừng trở lại!</Text>
+                <Text style = {{fontSize: 16, color: '#808080', marginTop: 4}}>Chúng tôi rất vui mừng được gặp lại bạn!</Text>
             </View>
 
             <View style = {{marginVertical: 32}}>
@@ -57,7 +57,7 @@ const LoginPage = ({navigation}) => {
                     onChangeText={text => setUsername(text)}
                 />
                 <Text style = {{color: '#B5BAC1', fontSize: 12, fontWeight: 600, marginBottom: 12}}>
-                    PASSWORD <Text style = {{color: 'red', marginLeft: 4}}>*</Text>
+                    MẬT KHẨU <Text style = {{color: 'red', marginLeft: 4}}>*</Text>
                 </Text>
                 <View style = {{position: 'relative'}}>
                     <TextInput placeholder="Mật khẩu" 
@@ -75,19 +75,19 @@ const LoginPage = ({navigation}) => {
                         </Pressable>
                     }
                 </View>
-                <Text style = {{color: "#00A8FC", fontSize: 14, fontWeight: 500}}>Forgot your password?</Text>
+                <Text style = {{color: "#00A8FC", fontSize: 14, fontWeight: 500}}>Quên mật khẩu?</Text>
             </View>
 
             <View>
                 <Pressable style = {styles.buttonLogin} onPress={handleLogin}>
-                    <Text style = {{color: '#fff', fontSize: 16}}>Log In</Text>
+                    <Text style = {{color: '#fff', fontSize: 16}}>Đăng nhập</Text>
                 </Pressable>
             </View>
 
             <View style = {styles.suggestRegister}>
-                <Text style = {{color: '#949BA4', marginRight: 6, fontSize: 14}}>Need an account?</Text>
+                <Text style = {{color: '#949BA4', marginRight: 6, fontSize: 14}}>Bạn chưa có tài khoản?</Text>
                 <Pressable onPress={handleRegister}>
-                    <Text style = {{color: '#00A8FC', fontSize: 14}}>Register</Text>
+                    <Text style = {{color: '#00A8FC', fontSize: 14}}>Đăng ký</Text>
                 </Pressable>
             </View>
         </View>
@@ -111,9 +111,9 @@ const styles = StyleSheet.create({
         marginBottom: 28
     },
     logo: {
-        width: 54,
-        height: 54,
-        marginRight: 12
+        width: 42,
+        height: 42,
+        marginRight: 8
     },  
     textLogo: {
         fontSize: 28,

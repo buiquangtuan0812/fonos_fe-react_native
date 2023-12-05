@@ -6,11 +6,10 @@ import {
 import RNPickerSelect from "react-native-picker-select";
 import CheckBox from 'expo-checkbox';
 
-const logo = require("../../../assets/images/vecteezy_abstract-colorful-background-book_22507090_384.png");
 const url = 'https://github.com/buiquangtuan0812';
+const logo = require('../../../assets/images/logo.webp'); 
 import OpenURLButton from "../../components/Link/Link";
 import Icon from "react-native-vector-icons/FontAwesome";
-import axios from 'axios';
 
 const Register = () => {
     
@@ -135,7 +134,7 @@ const Register = () => {
             </View>
 
             <View>
-                <Text style = {styles.textHeader}>Create an account</Text>
+                <Text style = {styles.textHeader}>Tạo tài khoản miễn phí</Text>
             </View>
 
             <View style = {{width: 360}}>
@@ -148,7 +147,7 @@ const Register = () => {
                 </Text>
                 <TextInput style = {styles.textInput} onChangeText={text => setUsername(text)}/>
                 <Text style = {{color: '#B5BAC1', fontSize: 12, fontWeight: 600, marginBottom: 8}}>
-                    PASSWORD <Text style = {{color: 'red', marginLeft: 4}}>*</Text>
+                    MẬT KHẨU <Text style = {{color: 'red', marginLeft: 4}}>*</Text>
                 </Text>
                 <View style = {{position: 'relative'}}>
                     <TextInput style = {styles.textInput} secureTextEntry = {showPassword ? false : true} onChangeText={text => setPassword(text)}/>
@@ -162,14 +161,14 @@ const Register = () => {
                         </Pressable>
                     }
                 </View>
-                <Text style = {{color: '#B5BAC1', fontSize: 12, fontWeight: 600, marginBottom: 8}}>DATE OF BIRTH</Text>
+                <Text style = {{color: '#B5BAC1', fontSize: 12, fontWeight: 600, marginBottom: 8}}>Ngày sinh</Text>
             </View>
             <View style = {styles.selectContainer}>
                 <RNPickerSelect
                     items={days}
                     value={day}
                     onValueChange={(value) => setDay(value)}
-                    placeholder={{label: 'Day', value: null}}
+                    placeholder={{label: 'Ngày', value: null}}
                     style={{
                         inputIOS: {
                             fontSize: 14,
@@ -187,7 +186,7 @@ const Register = () => {
                     items={months}
                     value={month}
                     onValueChange={(value) => setMonth(value)}
-                    placeholder={{label: 'Month', value: null}}
+                    placeholder={{label: 'Tháng', value: null}}
                     style={{
                         inputIOS: {
                             fontSize: 14,
@@ -205,7 +204,7 @@ const Register = () => {
                     items={years}
                     value={year}
                     onValueChange={(value) => setYears(value)}
-                    placeholder={{label: 'Year', value: null}}
+                    placeholder={{label: 'Năm', value: null}}
                     style={{
                         inputIOS: {
                             fontSize: 14,
@@ -231,7 +230,7 @@ const Register = () => {
                     }}
                 />
                 <Text style = {{fontSize: 12, color: '#fff', marginRight: 22, fontFamily: 'Montserrat'}}>
-                    (Optional) It's okay to send me emails with VieBook updates, tips, and special offers. You can opt out any time.
+                    (Tùy chọn) Gửi cho tôi email về cập nhật VieBook, mẹo vặt và ưu đãi đặc biệt.
                 </Text>
             </View>
 
@@ -240,14 +239,14 @@ const Register = () => {
                     style={[styles.buttonLogin, { opacity: isCliked ? 0.8 : 1 }]}
                     onPress={handleRegister}
                 >
-                    <Text style = {{color: '#fff', fontSize: 16}}>Continue</Text>
+                    <Text style = {{color: '#fff', fontSize: 16}}>Đăng ký</Text>
                 </Pressable>
             </View>
-            
             <View style = {styles.ruleContainer}>
-                <Text>By registering yu agree to VieBook's </Text>
-                <OpenURLButton url = {url} children="Rerms of Service." style = {{fontSize: 12, color: '#00A8FC'}} />
+                <Text style = {styles.textRule}>Bằng cách đăng ký, bạn đồng ý với quy tắc của VieBook.</Text>
+                {/* <OpenURLButton url = {url} children="Rerms of Service." style = {{fontSize: 12, color: '#00A8FC'}} /> */}
             </View>
+            
         </View>
     )
 }
@@ -269,8 +268,9 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     logo: {
-        width: 72,
-        height: 72,
+        width: 42,
+        height: 42,
+        marginRight: 8
     },  
     textLogo: {
         fontSize: 28,
@@ -322,8 +322,14 @@ const styles = StyleSheet.create({
     ruleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
         width: 360,
-        fontSize: 12,
         marginTop: 8
+    },
+    textRule: {
+        fontSize: 12, 
+        color: '#fff', 
+        marginRight: 22, 
+        fontFamily: 'Montserrat'
     }
 });
