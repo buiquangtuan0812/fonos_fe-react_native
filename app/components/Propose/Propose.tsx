@@ -1,20 +1,31 @@
-import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { View, StyleSheet, Image, Alert } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 
-const Propose = () => {
-    const lstImages = [
-        require("../../../assets/images/dac_nhan_tam.jpg"),
-        require("../../../assets/images/dac_nhan_tam.jpg"),
-        require("../../../assets/images/dac_nhan_tam.jpg"),
-        require("../../../assets/images/dac_nhan_tam.jpg"),
-        require("../../../assets/images/dac_nhan_tam.jpg"),
-        require("../../../assets/images/dac_nhan_tam.jpg"),
-    ];
+interface ImageData {
+    uri: string;
+}
 
-    const renderImage = ({ item }) => {
+const Propose: React.FC = () => {
+
+    const [lstImages, setLists] = useState<ImageData[]>([]);
+
+    useEffect(() => {
+        axios.get<{ data: { imgDes: string }[] }>('http://192.168.34.109:8080/get_book_propose')
+            .then(res => {
+                const data = res.data.data;
+                const listImgs: ImageData[] = data.map(element => ({ uri: element.imgDes }));
+                setLists(listImgs);
+            })
+            .catch(err => {
+                Alert.alert(err.message);
+            })
+    }, []);
+
+    const renderImage = ({ item }: { item: ImageData }) => {
         return (
-            <Image source={item} style={styles.image} />
+            <Image style={styles.image} source={{ uri: item.uri }} />
         );
     };
 

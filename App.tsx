@@ -3,12 +3,19 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'react-native';
 
-import Home from './app/layout/Home';
+import Home from './app/layout/Home/Home';
 import LoginPage from './app/layout/Login/Login';
 import Option from './app/components/Option/Option';
 import Register from './app/layout/Register/Register';
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+    Home: {id: string | null};
+    Login: undefined;
+    Option: undefined;
+    Register: undefined;
+}
+
+const Stack = createStackNavigator<RootStackParamList>();
 
 const commonHeaderOptions = {
     headerStyle: {
@@ -25,7 +32,7 @@ const commonHeaderOptions = {
     },
 };
 
-const App = () => {
+const App: React.FC = () => {
     return (
         <NavigationContainer>
             <StatusBar backgroundColor="#32363b" />
@@ -35,8 +42,8 @@ const App = () => {
                     component={Home} options={{ ...commonHeaderOptions, headerShown: false }}
                 />
                 <Stack.Screen name = "Option" component={Option} options={{ ...commonHeaderOptions, headerShown: false }}/>
-                <Stack.Screen name = "Login" component={LoginPage}/>
-                <Stack.Screen name = "Register" component={Register} />
+                <Stack.Screen name = "Login" component={LoginPage} options={{ ...commonHeaderOptions, headerShown: false }}/>
+                <Stack.Screen name = "Register" component={Register} options={{ ...commonHeaderOptions, headerShown: false }}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
