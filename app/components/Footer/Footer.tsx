@@ -6,42 +6,55 @@ import styles from "./footer.style";
 import { SetStateAction, useState } from "react";
 
 interface FooterItem {
-    index: number;
+    indexValue: number;
     iconName: string;
     text: string;
     color: string;
 }
 
-const FooterItemComponent : React.FC<FooterItem & {onPress: () => void}> = (
+const FooterItemComponent : React.FC<FooterItem & {isClicked: boolean} & {onPress: () => void}> = (
     {
-        index,
+        indexValue,
         iconName,
         text,
         color,
-        onPress,
+        isClicked,
+        onPress
     }
-) => (
-    <TouchableOpacity onPress={onPress}>
-        <View style = {styles.item}>
-            <Icon style = {{fontSize: 26, color: color, marginBottom: 2}} name = {iconName}/>
-            <Text style = {styles.text}>{text}</Text>
-        </View>
-    </TouchableOpacity>
-)
+) => {
+
+    return (
+        <TouchableOpacity onPress={onPress}>
+            <View style = {styles.item}>
+                {isClicked ? 
+                    <Icon style = {{fontSize: 26, color: '#ff7f50', marginBottom: 2}} name = {iconName}/>
+                    :
+                    <Icon style = {{fontSize: 26, color: color, marginBottom: 2}} name = {iconName}/>
+                }
+                {
+                    isClicked ?
+                    <Text style = {styles.textClicked}>{text}</Text>
+                    :
+                    <Text style = {styles.text}>{text}</Text>
+                }
+            </View>
+        </TouchableOpacity>
+    )
+}
 
 const Footer : React.FC = () => {
     const [fontLoaded] = useFonts({
         'Lato-Blod' : require('../../../assets/fonts/Lato-Bold.ttf'),
     });
 
-    const [index, setIndex] = useState(1);
-
     const items: FooterItem[] = [
-        { index: 1, iconName: "home", text: "Trang chủ", color: "#b1b9d1" },
-        { index: 2, iconName: "star", text: "Mới & Hot", color: "#b1b9d1" },
-        { index: 3, iconName: "bookmark", text: "Thư viện", color: "#b1b9d1" },
-        { index: 4, iconName: "gear", text: "Cài đặt", color: "#b1b9d1" },
+        { indexValue: 1, iconName: "home", text: "Trang chủ", color: "#b1b9d1" },
+        { indexValue: 2, iconName: "star", text: "Mới & Hot", color: "#b1b9d1" },
+        { indexValue: 3, iconName: "bookmark", text: "Thư viện", color: "#b1b9d1" },
+        { indexValue: 4, iconName: "gear", text: "Cài đặt", color: "#b1b9d1" },
     ];
+
+    const [index, setIndex] = useState(1);
 
     const onClick = (value: SetStateAction<number>) => {
         setIndex(value);
@@ -54,9 +67,10 @@ const Footer : React.FC = () => {
         <View style={styles.container}>
         {items.map((item) => (
             <FooterItemComponent
-                key={item.index}
+                key={item.indexValue}
                 {...item}
-                onPress={() => onClick(item.index)}
+                isClicked  = {index === item.indexValue ? true : false}
+                onPress = {() => onClick(item.indexValue)}
             />
         ))}
       </View>

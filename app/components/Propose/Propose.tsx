@@ -12,7 +12,7 @@ const Propose: React.FC = () => {
     const [lstImages, setLists] = useState<ImageData[]>([]);
 
     useEffect(() => {
-        axios.get<{ data: { imgDes: string }[] }>('http://192.168.34.109:8080/get_book_propose')
+        axios.get<{ data: { imgDes: string }[] }>('http://192.168.31.199:8080/get_book_propose')
             .then(res => {
                 const data = res.data.data;
                 const listImgs: ImageData[] = data.map(element => ({ uri: element.imgDes }));
