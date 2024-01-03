@@ -54,10 +54,11 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        marginBottom: 80
     },
     image: {
         width: 220,
-        height: 340,
+        height: 320,
         borderRadius: 16,
         overflow: "hidden"
     }

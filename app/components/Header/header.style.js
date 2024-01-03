@@ -2,14 +2,14 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     containerHeader: {
-        flex: 1/12,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingTop: 24,
+        paddingTop: 28,
         paddingRight: 20,
-        paddingBottom: 4,
+        paddingBottom: 12,
         paddingLeft: 20,
+        marginBottom: 12,
         backgroundColor: '#593d56',
         ...Platform.select({
             ios: {

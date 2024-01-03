@@ -1,7 +1,8 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
 import ContextBtn, { ContextBtnProps } from '../MyContext/ContextBtn';
+import React from 'react';
 
 const ButtonBack : React.FC = (props) => {
 

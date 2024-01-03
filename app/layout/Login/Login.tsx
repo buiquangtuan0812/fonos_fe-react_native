@@ -14,6 +14,7 @@ import { RootStackParamList } from "../../../App";
 import ButtonBack from "../../components/Button/ButtonBack";
 import ContextBtn from "../../components/MyContext/ContextBtn";
 import styles from "./login.style";
+import React from "react";
 
 const logo = require('../../../assets/images/logo.webp');
 const background = require('../../../assets/images/side-wave_background.png');

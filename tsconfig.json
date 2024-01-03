@@ -7,5 +7,6 @@
             "tests": ["tests/*"],
             "@components/*": ["app/components/*"],
         },
+        "jsx": "react-native"
     }
 }

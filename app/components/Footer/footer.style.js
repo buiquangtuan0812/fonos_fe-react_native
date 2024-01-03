@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
         paddingLeft: 24,
         borderTopLeftRadius: 40,
         borderTopRightRadius: 40,
-        backgroundColor: '#fffafa'
+        backgroundColor: '#f1f8ed'
     },
     item : {
         flexDirection: 'column',
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         color: '#b1b9d1',
         fontFamily: 'Lato-Blod'
     },
-    textHome: {
+    textClicked: {
         fontSize: 14,
         fontWeight: 900,
         color: '#ff7f50',

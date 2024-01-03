@@ -4,11 +4,15 @@ const styles = StyleSheet.create({
     containerHome: {
         flex: 1,
     },
-    imgBackGround: {
-        flex: 1,
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100%',
+    scrollView: {
+        backgroundColor: '#f3f8fc'
+    },
+    containerClassify: {
+        flexDirection: 'row', 
+        alignItems : 'center', 
+        width: '100%', 
+        justifyContent: 'center',
+        marginBottom: 16
     }
 });
 

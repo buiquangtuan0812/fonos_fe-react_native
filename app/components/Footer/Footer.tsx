@@ -1,38 +1,65 @@
 import { useFonts } from "expo-font";
-import {Text, View } from "react-native";
+import {Text, View, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 import styles from "./footer.style";
+import { SetStateAction, useState } from "react";
+
+interface FooterItem {
+    index: number;
+    iconName: string;
+    text: string;
+    color: string;
+}
+
+const FooterItemComponent : React.FC<FooterItem & {onPress: () => void}> = (
+    {
+        index,
+        iconName,
+        text,
+        color,
+        onPress,
+    }
+) => (
+    <TouchableOpacity onPress={onPress}>
+        <View style = {styles.item}>
+            <Icon style = {{fontSize: 26, color: color, marginBottom: 2}} name = {iconName}/>
+            <Text style = {styles.text}>{text}</Text>
+        </View>
+    </TouchableOpacity>
+)
 
 const Footer : React.FC = () => {
     const [fontLoaded] = useFonts({
         'Lato-Blod' : require('../../../assets/fonts/Lato-Bold.ttf'),
     });
+
+    const [index, setIndex] = useState(1);
+
+    const items: FooterItem[] = [
+        { index: 1, iconName: "home", text: "Trang chủ", color: "#b1b9d1" },
+        { index: 2, iconName: "star", text: "Mới & Hot", color: "#b1b9d1" },
+        { index: 3, iconName: "bookmark", text: "Thư viện", color: "#b1b9d1" },
+        { index: 4, iconName: "gear", text: "Cài đặt", color: "#b1b9d1" },
+    ];
+
+    const onClick = (value: SetStateAction<number>) => {
+        setIndex(value);
+    }
+
     if (!fontLoaded) {
         return null;
     }
     return (
-        <View style = {styles.container}>
-            <View style = {styles.item}>
-                <Icon style = {{fontSize: 26, color: '#ff7f50', marginBottom: 2}} name="home"/>
-                <Text style = {styles.textHome}>Trang chủ</Text>
-            </View>
-
-            <View style = {styles.item}>
-                <Icon style = {{fontSize: 26, color: '#b1b9d1', marginBottom: 2}} name = "star"/>
-                <Text style = {styles.text}>Mới & Hot</Text>
-            </View>
-
-            <View style = {styles.item}>
-                <Icon style = {{fontSize: 26, color: '#b1b9d1', marginBottom: 2}} name = "bookmark"/>
-                <Text style = {styles.text}>Thư viện</Text>
-            </View>
-
-            <View style = {styles.item}>
-                <Icon style = {{fontSize: 26, color: '#b1b9d1', marginBottom: 2}} name = "gear"/>
-                <Text style = {styles.text}>Cài đặt</Text>
-            </View>
-        </View>
+        <View style={styles.container}>
+        {items.map((item) => (
+            <FooterItemComponent
+                key={item.index}
+                {...item}
+                onPress={() => onClick(item.index)}
+            />
+        ))}
+      </View>
     );
 };
 
