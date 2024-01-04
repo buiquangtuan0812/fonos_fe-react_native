@@ -8,7 +8,7 @@ import styles from "./header.style";
 const ImgLogo = require("../../../assets/images/logo.webp");
 
 type HeaderProps = {
-    navigation: StackNavigationProp<RootStackParamList, 'Option'>;
+    navigation: StackNavigationProp<RootStackParamList>;
 }
 
 const Header: React.FC<HeaderProps> = ({navigation}) => {
@@ -18,11 +18,16 @@ const Header: React.FC<HeaderProps> = ({navigation}) => {
 
     if (!fontLoaded) {
         return null;
-    }
+    };
 
     const handleToOption = () => {
         navigation.navigate('Option');
+    };
+
+    const handleToSearch = () => {
+        navigation.navigate('Search');
     }
+
     return (
         <View style = {styles.containerHeader}> 
             <View style = {styles.itemLeft}>
@@ -31,7 +36,9 @@ const Header: React.FC<HeaderProps> = ({navigation}) => {
             </View>
 
             <View style = {styles.itemRight}>
-                <Icon name="search" style = {styles.iconSearch}/>
+                <TouchableOpacity onPress={handleToSearch}>
+                    <Icon name="search" style = {styles.iconSearch}/>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={handleToOption}>
                     <Icon name="user-circle" style = {styles.iconUser}/>
                 </TouchableOpacity>

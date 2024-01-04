@@ -7,12 +7,14 @@ import Home from './app/layout/Home/Home';
 import LoginPage from './app/layout/Login/Login';
 import Option from './app/components/Option/Option';
 import Register from './app/layout/Register/Register';
+import Search from './app/layout/Search/Search';
 
 export type RootStackParamList = {
     Home: {id: string | null};
     Login: undefined;
     Option: undefined;
     Register: undefined;
+    Search: undefined;
 }
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -41,9 +43,10 @@ const App: React.FC = () => {
                     name = "Home" 
                     component={Home} options={{ ...commonHeaderOptions, headerShown: false }}
                 />
-                <Stack.Screen name = "Option" component={Option} options={{ ...commonHeaderOptions, headerShown: false }}/>
                 <Stack.Screen name = "Login" component={LoginPage} options={{ ...commonHeaderOptions, headerShown: false }}/>
                 <Stack.Screen name = "Register" component={Register} options={{ ...commonHeaderOptions, headerShown: false }}/>
+                <Stack.Screen name = "Search" component={Search} options={{ ...commonHeaderOptions, headerShown: false }}/>
+                <Stack.Screen name = "Option" component={Option} options={{ ...commonHeaderOptions, headerShown: false }}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

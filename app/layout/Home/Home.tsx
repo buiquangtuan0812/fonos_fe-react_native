@@ -14,7 +14,7 @@ import { RootStackParamList } from '../../../App';
 import styles from './home.style';
 
 type HomeProps = {
-  navigation: StackNavigationProp<RootStackParamList, 'Option'>;
+  navigation: StackNavigationProp<RootStackParamList>;
   route: RouteProp<RootStackParamList, 'Home'>;
 }
 

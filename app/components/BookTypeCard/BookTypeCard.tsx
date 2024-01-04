@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Alert, Image, ImageStyle, Text, View, FlatList } from "react-native";
-import Carousel from 'react-native-snap-carousel';
 
 import styles from './style';
 
