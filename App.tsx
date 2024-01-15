@@ -8,13 +8,17 @@ import LoginPage from './app/layout/Login/Login';
 import Option from './app/components/Option/Option';
 import Register from './app/layout/Register/Register';
 import Search from './app/layout/Search/Search';
+import Author from './app/layout/Author/Author';
+import BookDetail from './app/layout/BookDetail/BookDetail';
 
 export type RootStackParamList = {
     Home: {id: string | null};
     Login: undefined;
     Option: undefined;
     Register: undefined;
-    Search: undefined;
+    Search: {idUser: string};
+    BookDetail: {idBook: string, address: string, idUser: string};
+    AuthorProfile: {nameAuthor: string, idBook: string}
 }
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -47,6 +51,8 @@ const App: React.FC = () => {
                 <Stack.Screen name = "Register" component={Register} options={{ ...commonHeaderOptions, headerShown: false }}/>
                 <Stack.Screen name = "Search" component={Search} options={{ ...commonHeaderOptions, headerShown: false }}/>
                 <Stack.Screen name = "Option" component={Option} options={{ ...commonHeaderOptions, headerShown: false }}/>
+                <Stack.Screen name = "BookDetail" component={BookDetail} options={{ ...commonHeaderOptions, headerShown: false }}/>
+                <Stack.Screen name = "AuthorProfile" component={Author} options={{ ...commonHeaderOptions, headerShown: false }}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

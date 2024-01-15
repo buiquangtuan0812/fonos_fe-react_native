@@ -17,7 +17,6 @@ import styles from './register.style';
 import ButtonBack from '../../components/Button/ButtonBack';
 import MyContext from '../../components/MyContext/MyContext';
 import Success from '../../components/Confirm/Success/Success';
-import ContextBtn from '../../components/MyContext/ContextBtn';
 
 // const url = 'https://github.com/buiquangtuan0812';
 const logo = require('../../../assets/images/logo.webp'); 
@@ -169,10 +168,6 @@ const Register : React.FC<Props> = ({navigation}) => {
         }
     };
 
-    const handleBack = () => {
-        navigation.navigate("Option");
-    }
-
     const handleTouchOutside = () => {
         Keyboard.dismiss();
     };
@@ -215,13 +210,7 @@ const Register : React.FC<Props> = ({navigation}) => {
                             <Success />
                         </MyContext.Provider>
                     </Modal>
-                    <ContextBtn.Provider
-                        value={{
-                            handleBack: handleBack
-                        }}
-                    >
-                        <ButtonBack/>
-                    </ContextBtn.Provider>
+                    <ButtonBack address="Option" navigation={navigation}/>
                     <View>
                         <View style = {styles.header}>
                             <Image source = {logo} style = {styles.logo as ImageStyle}/>

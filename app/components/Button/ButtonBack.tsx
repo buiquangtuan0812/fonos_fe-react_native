@@ -1,12 +1,32 @@
-import { useContext } from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
-import Icon from "react-native-vector-icons/FontAwesome";
-import ContextBtn, { ContextBtnProps } from '../MyContext/ContextBtn';
 import React from 'react';
+import Icon from "react-native-vector-icons/FontAwesome";
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../../App';
 
-const ButtonBack : React.FC = (props) => {
+type Navigation = {
+    navigation: StackNavigationProp<RootStackParamList>;
+}
 
-    const {handleBack} = useContext(ContextBtn) as ContextBtnProps;
+interface Props {
+    address: string;
+}
+
+const ButtonBack : React.FC<Props & Navigation> = ({address, navigation}) => {
+
+    const handleBack = () => {
+        switch (address) {
+            case 'Search':
+                navigation.navigate("Search");
+                break;
+            case 'Option':
+                navigation.navigate("Option");
+                break;
+            default:
+                navigation.navigate("Home", {id: null});
+                break;
+        }
+    };
 
     return (
         <View style = {styles.btnBack}>
@@ -26,20 +46,19 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 40,
         left: 20,
+        zIndex: 10
     },
     btn: {
-        backgroundColor: '#223651',
-        paddingLeft: 12,
-        paddingRight: 12,
-        paddingBottom: 9,
-        paddingTop: 9,
+        backgroundColor: '#1b4d44',
+        paddingHorizontal: 10,
+        paddingVertical: 8,
         borderRadius: 50,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
     },
     icon: {
-        fontSize: 16,
+        fontSize: 14,
         color: '#ffffff'
     },
 })

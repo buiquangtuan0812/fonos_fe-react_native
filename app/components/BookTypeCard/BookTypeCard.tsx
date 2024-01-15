@@ -1,30 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Alert, Image, ImageStyle, Text, View, FlatList } from "react-native";
+import { Alert, Image, ImageStyle, Text, View, FlatList, TouchableOpacity } from "react-native";
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../../App';
 
 import styles from './style';
 
+type Navigation = {
+    navigation: StackNavigationProp<RootStackParamList>;
+}
+
 interface ImageData {
     uri: string;
+    idBook: string
 }
 
 interface Props {
     textShow: string;
     type: string;
+    user: any;
 }
 
-const BookTypeCard : React.FC<Props> = ({textShow, type}) => {
+const BookTypeCard : React.FC<Props & Navigation> = ({textShow, type, navigation, user}) => {
     const [lstImages, setLists] = useState<ImageData[]>([]);
 
     useEffect(() => {
-        axios.get<{data: {imgDes: string}[]}>('http://192.168.31.199:8080/get_book_by_type', {
+        axios.get<{data: {imgDes: string, _id: string}[]}>('http://192.168.34.109:8080/get_book_by_type', {
             params: {
                 type: type
             }
         })
         .then(res => {
             const data = res.data.data;
-            const listImgs : ImageData[] = data.map(element => ({uri: element.imgDes}));
+            const listImgs : ImageData[] = data.map(element => ({
+                uri: element.imgDes,
+                idBook: element._id
+            }));
             setLists(listImgs);
         })
         .catch(e => {
@@ -32,15 +43,21 @@ const BookTypeCard : React.FC<Props> = ({textShow, type}) => {
         })
     }, []);
 
+    const handleClick = (value: string) => {
+        navigation.navigate("BookDetail", {idBook: value, address: "Home", idUser: user.id})
+    }
+
     const renderImage = ({item} : {item: ImageData}) => {
         return (
-            <Image source={{uri: item.uri}} style = {styles.image as ImageStyle}/>
+            <TouchableOpacity onPress={() => handleClick(item.idBook)}>
+                <Image source={{uri: item.uri}} style = {styles.image as ImageStyle}/>
+            </TouchableOpacity>
         )
-    }
+    };
 
     return (
         <View style = {styles.container}>
-            <View style = {styles.header}>
+            <View>
                 <Text style = {styles.textHeader}>Đầu sách thuộc chủ đề</Text>
                 <Text style = {styles.textType}>{textShow}</Text>
             </View>

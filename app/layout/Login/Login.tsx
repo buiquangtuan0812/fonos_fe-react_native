@@ -1,4 +1,5 @@
 import { useState } from "react";
+import React from "react";
 import axios from "axios";
 import { useFonts } from "expo-font";
 import { LinearGradient } from "expo-linear-gradient";
@@ -11,10 +12,9 @@ import {
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../App";
 
-import ButtonBack from "../../components/Button/ButtonBack";
-import ContextBtn from "../../components/MyContext/ContextBtn";
 import styles from "./login.style";
-import React from "react";
+import ButtonBack from "../../components/Button/ButtonBack";
+import { saveCookies } from "../../utils/cookieStorage";
 
 const logo = require('../../../assets/images/logo.webp');
 const background = require('../../../assets/images/side-wave_background.png');
@@ -32,7 +32,7 @@ const LoginPage: React.FC<Props> = ({navigation}) => {
         'Lato-Italic': require('../../../assets/fonts/Lato-Italic.ttf')
     });
 
-    const handleLogin =  () => {
+    const handleLogin = async () => {
         var error = false;
         if (!username) {
             error = true;
@@ -44,32 +44,30 @@ const LoginPage: React.FC<Props> = ({navigation}) => {
         }
         else {
             setIsLoading(true);
-            setTimeout(() => {
+            setTimeout(async () => {
                 axios.post('http://192.168.34.109:8080/login', {
                     username: username!,
                     password: password!
                 })
-                .then(res => {
-                    if (res.data.statusCode === 200) {
+                    .then(res => {
+                        if (res.data.statusCode === 200) {
+                            setIsLoading(false);
+                            navigation.navigate("Home", {id: res.data.id});
+                        }
+                        else {
+                            Alert.alert(res.data.statusCode + ': ' + res.data.message);
+                            setIsLoading(false);
+                        }
+                    })
+                    .catch(err => {
+                        Alert.alert(err.message);
                         setIsLoading(false);
-                        navigation.navigate("Home", {id: res.data.id});
-                    }
-                    else {
-                        Alert.alert(res.data.statusCode + ': ' + res.data.message);
-                        setIsLoading(false);
-                    }
-                })
-                .catch(err => {
-                    Alert.alert(err.message);
-                    setIsLoading(false);
-                })
-            }, 1000);
+                    })
+                }, 1000);
+            const cookies = [`username=${username}`, `password=${password}`];
+            await saveCookies(cookies);
         }
     };
-
-    const handleBack = () => {
-        navigation.navigate("Option");
-    }
 
     const handleRegister = () => {
         navigation.navigate('Register');
@@ -98,13 +96,7 @@ const LoginPage: React.FC<Props> = ({navigation}) => {
                             <ActivityIndicator size="large"/>
                         </View>
                     </Modal>
-                    <ContextBtn.Provider
-                        value={{
-                            handleBack: handleBack
-                        }}
-                    >
-                        <ButtonBack/>
-                    </ContextBtn.Provider>
+                    <ButtonBack address="Option" navigation={navigation}/>
                     <View style = {styles.header}>
                         <Image source={logo} style = {styles.logo as ImageStyle}/>
                         <Text style = {styles.textLogo}>VieBook</Text>
