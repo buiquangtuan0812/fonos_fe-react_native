@@ -12,12 +12,12 @@ import Author from './app/layout/Author/Author';
 import BookDetail from './app/layout/BookDetail/BookDetail';
 
 export type RootStackParamList = {
-    Home: {id: string | null};
+    Home: {user: any};
     Login: undefined;
     Option: undefined;
     Register: undefined;
-    Search: {idUser: string};
-    BookDetail: {idBook: string, address: string, idUser: string};
+    Search: {user: any};
+    BookDetail: {idBook: string, address: string, user: any};
     AuthorProfile: {nameAuthor: string, idBook: string}
 }
 

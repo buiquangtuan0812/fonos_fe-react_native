@@ -28,7 +28,7 @@ const Header: React.FC<HeaderProps> = ({navigation, user}) => {
     };
 
     const handleToSearch = () => {
-        navigation.navigate('Search', {idUser: user.id});
+        navigation.navigate('Search', {user: user});
     }
 
     return (

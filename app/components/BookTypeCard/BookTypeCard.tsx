@@ -44,7 +44,7 @@ const BookTypeCard : React.FC<Props & Navigation> = ({textShow, type, navigation
     }, []);
 
     const handleClick = (value: string) => {
-        navigation.navigate("BookDetail", {idBook: value, address: "Home", idUser: user.id})
+        navigation.navigate("BookDetail", {idBook: value, address: "Home", user: user})
     }
 
     const renderImage = ({item} : {item: ImageData}) => {

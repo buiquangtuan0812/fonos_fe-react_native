@@ -2,7 +2,7 @@ import axios from "axios";
 import { useFonts } from "expo-font";
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, Text, TouchableOpacity, 
-    View, Image, ScrollView, TouchableWithoutFeedback, FlatList
+    View, Image, ScrollView, TouchableWithoutFeedback, FlatList, Keyboard
 } from "react-native";
 import { RootStackParamList } from "../../../App";
 import { RouteProp } from "@react-navigation/native";
@@ -19,9 +19,11 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import styles from "./styles";
 import Form from "../../components/FormShare/Form";
-import Dislike from "../../components/Confirm/Interact/Dislike";
+import Comment from "../../components/Comment/Comment";
 import Like from "../../components/Confirm/Interact/Like";
 import ButtonBack from "../../components/Button/ButtonBack";
+import FormRating from "../../components/FormRating/FormRating";
+import Dislike from "../../components/Confirm/Interact/Dislike";
 
 type Navigation = {
     navigation: StackNavigationProp<RootStackParamList>;
@@ -46,6 +48,15 @@ interface AuthorInfo {
     image: string;
 }
 
+interface CommentInfo {
+    _id: string;
+    rating: number;
+    content: string;
+    timestamp: string;
+    user: any;
+    like: number;
+}
+
 const BookDetail : React.FC<Navigation> = ({navigation, route}) => {
 
     const props = route.params;
@@ -60,7 +71,9 @@ const BookDetail : React.FC<Navigation> = ({navigation, route}) => {
     const [showFormLike, setShow] = useState(false);
     const [showDislike, setDislike] = useState(false);
     const [isGetBook, setIsGetBook] = useState(false);
+    const [isEvaluated, setIsEvaluated] = useState(false);
     const [isExtendTable, setExtendTable] = useState(false);
+    const [showFormRating, setShowFormRating] = useState(false);
 
     const [data, setData] = useState<BookInfo>({
         name: "",
@@ -78,7 +91,9 @@ const BookDetail : React.FC<Navigation> = ({navigation, route}) => {
         birthday:"",
         introduce: "",
         image: ""
-    })
+    });
+
+    const [lstComment, setComment] = useState<CommentInfo[]>([]);
 
     const [bookSameType, setDataBook] = useState<{
         id: string;
@@ -107,6 +122,50 @@ const BookDetail : React.FC<Navigation> = ({navigation, route}) => {
                 setData(dataBook);
             })
             .catch(err => { 
+                Alert.alert(err.message);
+            })
+    }, []);
+
+    useEffect(() => {
+        axios.get<{data: CommentInfo[]}>('http://192.168.34.109:8080/cmt/get_comment_of_book', {
+                params: {
+                    idBook: props.idBook
+                }
+            })
+            .then(res => {
+                const comments = res.data.data;
+                const lstComment : CommentInfo[] = comments.map(element => ({
+                    _id: element._id,
+                    rating: element.rating,
+                    content: element.content,
+                    timestamp: element.timestamp,
+                    user: element.user,
+                    like: element.like,
+                }));
+                setComment(lstComment);
+            })
+            .catch(err => {
+                setComment([]);
+                // Alert.alert(err.message);
+            })
+    }, []);
+
+    useEffect(() => {
+        axios.get('http://192.168.34.109:8080/cmt/is_rating', {
+                params: {
+                    idBook: props.idBook,
+                    idUser: props.user.id
+                }
+            })
+            .then(res => {
+                if (res.data.message === 'Not yet rated') {
+                    setIsEvaluated(false);
+                }
+                else {
+                    setIsEvaluated(true);
+                }
+            })
+            .catch(err => {
                 Alert.alert(err.message);
             })
     }, []);
@@ -165,7 +224,7 @@ const BookDetail : React.FC<Navigation> = ({navigation, route}) => {
         setLike(!isLike);
         if (isLike) {
             axios.post('http://192.168.34.109:8080/dislike_book', {
-                idUser: props.idUser,
+                idUser: props.user.id,
                 idBook: props.idBook
             })
                 .then()
@@ -178,7 +237,7 @@ const BookDetail : React.FC<Navigation> = ({navigation, route}) => {
         }
         else {
             axios.post('http://192.168.34.109:8080/like_book', {
-                idUser: props.idUser,
+                idUser: props.user.id,
                 idBook: props.idBook
             })
                 .then()
@@ -197,6 +256,22 @@ const BookDetail : React.FC<Navigation> = ({navigation, route}) => {
         );
     };
 
+    const renderComment = lstComment.map((value, key) => {
+        return (
+            <View key = {key}>
+                <Comment 
+                    idCmt = {value._id}
+                    user = {props.user}
+                    rating={value.rating} 
+                    timestamp = {value.timestamp} 
+                    content = {value.content}
+                    username = {value.user.username}
+                    like = {value.like}
+                />
+            </View>
+        );
+    });
+
     const renderTableContent = Object.entries(data.tableOfContent).map(([key, value]) => 
         (
             <View key = {key} 
@@ -206,12 +281,11 @@ const BookDetail : React.FC<Navigation> = ({navigation, route}) => {
                     <FontAwesomeIcon icon = {faReadme} color = "#aeb6c8" style={{marginTop: 5}}/>
                     <Text style = {styles.chapter}>{key}.{value}</Text>
                 </View>
-                {key.includes("1") 
-                ?
-                <FontAwesomeIcon icon = {faBookOpenReader} color="#778aa8" size={20}/>
-                :
-                <FontAwesomeIcon icon = {faLock} color="#778aa8"/>
-            }
+                {key === "Chương 1" || key === "Phần 1"
+                    ?
+                    <FontAwesomeIcon icon = {faBookOpenReader} color="#778aa8" size={20}/>
+                    :
+                    <FontAwesomeIcon icon = {faLock} color="#778aa8"/> }
             </View>
         )
     );
@@ -261,7 +335,7 @@ const BookDetail : React.FC<Navigation> = ({navigation, route}) => {
     return (
         <View style = {styles.container}>
             <View style = {styles.containerButton}>
-                <ButtonBack address={props.address} navigation={navigation}/>
+                <ButtonBack address={props.address} navigation={navigation} user = {props.user}/>
                 {isScroll ?
                     <View style = {{left: 80, position: 'absolute'}}>
                         <Text style = {[styles.name, {fontSize: 16, margin: 0, width: 240}]}>{data.name}</Text>
@@ -448,6 +522,21 @@ const BookDetail : React.FC<Navigation> = ({navigation, route}) => {
                             <FontAwesomeIcon icon = {faCommentDots} size={60} style={{color: '#d9dce1'}}/>
                             <Text style = {{color: '#687ea3', fontSize: 16, fontFamily: 'Lato-Bold', marginLeft: 20}}>Chưa có đánh giá nào</Text>
                         </View>
+
+                        <View style = {{marginTop: 28}}>
+                            {renderComment}
+                        </View>
+
+                        {!isEvaluated ? 
+                            <View style = {styles.ctnButton}>
+                                <TouchableOpacity style = {styles.btnRating} onPress={() => setShowFormRating(!showFormRating)}>
+                                    <Text style = {{color: '#fff', fontWeight: '700'}}>
+                                        Viết đánh giá
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                            : ''
+                        }
                     </View>
                     
                     <View 
@@ -508,6 +597,20 @@ const BookDetail : React.FC<Navigation> = ({navigation, route}) => {
                 <TouchableWithoutFeedback onPress={closeForm}>
                     <View style = {styles.containerFormShare}>
                         <Form closeForm={closeForm}/>
+                    </View>
+                </TouchableWithoutFeedback>
+                : ''
+            }
+
+            {
+                showFormRating ?
+                <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                    <View style = {styles.containerFormRating}>
+                        <FormRating 
+                            closeForm={() => setShowFormRating(!showFormRating)}
+                            idUser = {props.user.id}
+                            idBook = {props.idBook}
+                        />
                     </View>
                 </TouchableWithoutFeedback>
                 : ''

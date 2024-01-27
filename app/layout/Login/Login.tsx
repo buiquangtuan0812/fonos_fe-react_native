@@ -52,7 +52,7 @@ const LoginPage: React.FC<Props> = ({navigation}) => {
                     .then(res => {
                         if (res.data.statusCode === 200) {
                             setIsLoading(false);
-                            navigation.navigate("Home", {id: res.data.id});
+                            navigation.navigate("Home", {user: res.data.user});
                         }
                         else {
                             Alert.alert(res.data.statusCode + ': ' + res.data.message);
@@ -96,7 +96,7 @@ const LoginPage: React.FC<Props> = ({navigation}) => {
                             <ActivityIndicator size="large"/>
                         </View>
                     </Modal>
-                    <ButtonBack address="Option" navigation={navigation}/>
+                    <ButtonBack address="Option" navigation={navigation} user={""}/>
                     <View style = {styles.header}>
                         <Image source={logo} style = {styles.logo as ImageStyle}/>
                         <Text style = {styles.textLogo}>VieBook</Text>

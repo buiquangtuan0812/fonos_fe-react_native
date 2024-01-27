@@ -29,11 +29,7 @@ interface User {
 }
 
 const Home: React.FC<HomeProps> =  ({ navigation, route}) => {
-  // const {id} = route.params || "";
-  // if (id) {
-  //   Alert.alert(id);
-  // }
-
+  const props = route.params;
   const [user, setUser] = useState<User>({
     username: "",
     email: "",

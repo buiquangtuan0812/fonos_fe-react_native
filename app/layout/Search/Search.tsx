@@ -48,10 +48,6 @@ const Search : React.FC<Props> = ({navigation, route}) => {
             })
     }, []); 
 
-    const handleClickOnItem = (idBook: string) => {
-        navigation.navigate("BookDetail", {idBook: idBook, address: "Search", idUser: props.idUser});
-    }
-
     const hanldeSearch = () => {
         axios.get<
                 {data: {_id: string, imgDes: string, name: string}[]}
@@ -73,6 +69,10 @@ const Search : React.FC<Props> = ({navigation, route}) => {
             })
     };
 
+    const handleClickOnItem = (idBook: string) => {
+        navigation.navigate("BookDetail", {idBook: idBook, address: "Search", user: props.user});
+    };
+
     const renderItem = ({item} : {item: Books}) => {
         return (
             <TouchableOpacity onPress={() => handleClickOnItem(item.idBook)}>
@@ -88,7 +88,7 @@ const Search : React.FC<Props> = ({navigation, route}) => {
     }
 
     const handleCancel = () => {
-        navigation.navigate("Home", {id: null});
+        navigation.navigate("Home", {user: props.user});
     };
 
     const getItemCount = () => data.length;

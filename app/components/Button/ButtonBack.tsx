@@ -10,20 +10,21 @@ type Navigation = {
 
 interface Props {
     address: string;
+    user: string | "";
 }
 
-const ButtonBack : React.FC<Props & Navigation> = ({address, navigation}) => {
+const ButtonBack : React.FC<Props & Navigation> = ({address, user, navigation}) => {
 
     const handleBack = () => {
         switch (address) {
             case 'Search':
-                navigation.navigate("Search");
+                navigation.navigate("Search", {user: user});
                 break;
             case 'Option':
                 navigation.navigate("Option");
                 break;
             default:
-                navigation.navigate("Home", {id: null});
+                navigation.navigate("Home", {user: user});
                 break;
         }
     };

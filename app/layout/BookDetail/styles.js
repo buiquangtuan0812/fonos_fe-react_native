@@ -175,6 +175,29 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.4)',
         flexDirection: 'column',
         zIndex: 15,
+    },
+    containerFormRating: {
+        flex: 1,
+        top: 0,
+        bottom: 0,
+        width: '100%',
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        zIndex: 15,
+    },
+    ctnButton: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 24
+    },
+    btnRating: {
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        backgroundColor: '#ccc',
+        borderRadius: 12,
+        backgroundColor: '#ff7f50',
     }
 });
 

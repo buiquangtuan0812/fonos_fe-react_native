@@ -33,7 +33,7 @@ const Propose: React.FC<Navigation> = ({navigation, user}) => {
     }, []);
 
     const handleClick = (value: string) => {
-        navigation.navigate("BookDetail", {idBook: value, address: "Home", idUser: user.id})
+        navigation.navigate("BookDetail", {idBook: value, address: "Home", user: user})
     };
 
     const renderImage = ({ item }: { item: ImageData }) => {

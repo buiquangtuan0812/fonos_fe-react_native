@@ -210,7 +210,7 @@ const Register : React.FC<Props> = ({navigation}) => {
                             <Success />
                         </MyContext.Provider>
                     </Modal>
-                    <ButtonBack address="Option" navigation={navigation}/>
+                    <ButtonBack address="Option" navigation={navigation} user = {""}/>
                     <View>
                         <View style = {styles.header}>
                             <Image source = {logo} style = {styles.logo as ImageStyle}/>
